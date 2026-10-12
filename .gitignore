@@ -1,0 +1,14 @@
+.env
+keys/
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.vscode/
+.idea/
+
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep

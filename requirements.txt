@@ -1,0 +1,5 @@
+requests>=2.31
+pandas>=2.1
+python-dotenv>=1.0
+snowflake-connector-python[pandas]>=3.12
+pytest>=8.0
