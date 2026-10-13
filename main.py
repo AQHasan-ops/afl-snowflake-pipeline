@@ -12,6 +12,7 @@ def parse_args():
     parser.add_argument("--setup", action="store_true", help="create the warehouse, database, schemas and raw tables first")
     parser.add_argument("--no-snowflake", action="store_true", help="only extract and clean, save CSVs locally")
     parser.add_argument("--transform-only", action="store_true", help="skip the API and only rebuild the SQL layers")
+    parser.add_argument("--refresh", action="store_true", help="download from the API again even if saved JSON exists")
     return parser.parse_args()
 
 
@@ -26,7 +27,7 @@ def main():
     args = parse_args()
 
     if not args.transform_only:
-        teams, games, standings = extract.extract_all(args.years)
+        teams, games, standings = extract.extract_all(args.years, args.refresh)
         teams_df = clean.clean_teams(teams)
         games_df = clean.clean_games(games)
         standings_df = clean.clean_standings(standings)

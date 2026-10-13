@@ -31,38 +31,43 @@ def save_raw(data, name):
     return path
 
 
-def get_teams():
-    data = fetch("teams")
-    save_raw(data, "teams")
-    return data["teams"]
+def get_data(query, name, refresh=False):
+    path = RAW_DIR / f"{name}.json"
+    if path.exists() and not refresh:
+        logger.info("Using saved %s", path.name)
+        with open(path, encoding="utf-8") as file:
+            return json.load(file)
+
+    data = fetch(query)
+    save_raw(data, name)
+    time.sleep(1)
+    return data
 
 
-def get_games(year):
-    data = fetch(f"games;year={year}")
-    save_raw(data, f"games_{year}")
-    return data["games"]
+def get_teams(refresh=False):
+    return get_data("teams", "teams", refresh)["teams"]
 
 
-def get_standings(year):
-    data = fetch(f"standings;year={year}")
-    save_raw(data, f"standings_{year}")
-    rows = data["standings"]
+def get_games(year, refresh=False):
+    return get_data(f"games;year={year}", f"games_{year}", refresh)["games"]
+
+
+def get_standings(year, refresh=False):
+    rows = get_data(f"standings;year={year}", f"standings_{year}", refresh)["standings"]
     for row in rows:
         row["year"] = year
     return rows
 
 
-def extract_all(years):
-    teams = get_teams()
+def extract_all(years, refresh=False):
+    teams = get_teams(refresh)
     logger.info("Extracted %s teams", len(teams))
 
     games = []
     standings = []
     for year in years:
-        year_games = get_games(year)
-        time.sleep(1)
-        year_standings = get_standings(year)
-        time.sleep(1)
+        year_games = get_games(year, refresh)
+        year_standings = get_standings(year, refresh)
         logger.info("Extracted %s games and %s ladder rows for %s", len(year_games), len(year_standings), year)
         games.extend(year_games)
         standings.extend(year_standings)
