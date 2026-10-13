@@ -58,8 +58,6 @@ I also checked a few team totals by hand against the raw JSON (Fremantle 2026, B
 | 7 | Melbourne | 24 | 15 | 9 | 0 | 62.5 | 7.6 | |
 | 8 | Western Bulldogs | 25 | 14 | 10 | 1 | 56.0 | -4.4 | |
 
-![Team season summary in Snowflake](images/team_season_summary.png)
-
 ## Setup
 
 Snowflake login uses a key pair instead of a password, because password logins need MFA. I made an RSA key and added the public key to my user with `ALTER USER ... SET RSA_PUBLIC_KEY`. The path to the private key goes in `.env`. Neither the key nor `.env` is in the repo.
